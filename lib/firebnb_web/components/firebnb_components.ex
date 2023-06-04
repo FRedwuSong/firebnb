@@ -4,7 +4,7 @@ defmodule FirebnbWeb.Components do
   def price(assigns) do
     ~H"""
     <div class="font-bold text-gray-700">
-      €<%= @amount %> <span class="font-normal">night</span>
+      €<%= render_slot(@inner_block) %> <span class="font-normal">night</span>
     </div>
     """
   end
@@ -12,7 +12,7 @@ defmodule FirebnbWeb.Components do
   def room_title(assigns) do
     ~H"""
     <h1 class="pt-3 font-bold text-gray-700 line-clamp-2">
-      <%= @text %>
+      <%= render_slot(@inner_block) %>
     </h1>
     """
   end
