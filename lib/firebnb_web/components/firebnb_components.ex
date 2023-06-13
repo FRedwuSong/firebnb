@@ -24,6 +24,7 @@ defmodule FirebnbWeb.Components do
   slot :title, required: true, doc: "Room title"
   slot :price, required: true, doc: "Room price"
   slot :location, required: true, doc: "Room location"
+  attr :superhost, :boolean, default: false
 
   slot :cover_image, required: true do
     attr :src, :string, required: true
@@ -31,7 +32,13 @@ defmodule FirebnbWeb.Components do
 
   def room(assigns) do
     ~H"""
-    <a href="">
+    <a href="" class="relative">
+      <div
+        :if={@superhost}
+        class="absolute left-2 top-2 rounded-sm bg-slate-100 py-0.5 px-1 text-sm font-bold"
+      >
+        Superhost
+      </div>
       <div>
         <img
           :for={image <- @cover_image}
@@ -50,6 +57,42 @@ defmodule FirebnbWeb.Components do
         </div>
       </div>
     </a>
+    """
+  end
+
+  def toggle_superhost(assigns) do
+    ~H"""
+    <div class="flex items-center py-6">
+      <!-- Enabled: "bg-amber-600", Not Enabled: "bg-gray-200" -->
+      <button
+        type="button"
+        class={[
+          "relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2",
+          !@superhost && "bg-gray-200",
+          @superhost && "bg-amber-600"
+        ]}
+        role="switch"
+        aria-checked="false"
+        aria-labelledby="superhost-label"
+        phx-click="toggle_superhost"
+      >
+        <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+        <span
+          aria-hidden="true"
+          class={[
+            "pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out",
+            !@superhost && "translate-x-0",
+            @superhost && "translate-x-5"
+          ]}
+        >
+        </span>
+      </button>
+      <span class="ml-3" id="superhost-label">
+        <span class="text-sm font-medium text-gray-900">
+          <%= render_slot(@inner_block) %>
+        </span>
+      </span>
+    </div>
     """
   end
 end
