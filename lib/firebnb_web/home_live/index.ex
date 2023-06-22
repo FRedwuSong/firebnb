@@ -5,12 +5,12 @@ defmodule FirebnbWeb.HomeLive.Index do
   alias Firebnb.Booking
 
   def mount(_params, _session, socket) do
-    rooms = Booking.list_rooms()
+    rooms = Booking.list_rooms(socket.assigns.current_user)
 
     {:ok, assign(socket, rooms: rooms, superhost: false)}
   end
 
-  def handle_event("toggle_superhost", _, socket) do
+  def handle_event("toggle_superhost", _params, socket) do
     superhost = !socket.assigns.superhost
 
     filters =
@@ -19,7 +19,7 @@ defmodule FirebnbWeb.HomeLive.Index do
         _ -> []
       end
 
-    rooms = Booking.list_rooms(filters)
+    rooms = Booking.list_rooms(socket.assigns.current_user, filters)
 
     {:noreply, assign(socket, superhost: superhost, rooms: rooms)}
   end
